@@ -31,6 +31,16 @@ jobs:
     - name: Checkout code
       uses: actions/checkout@v2
 
+    # Cache Maven dependencies
+    - name: Cache Maven dependencies
+      id: cache
+      uses: actions/cache@v2
+      with:
+        path: ~/.m2/repository
+        key: ${{ runner.os }}-maven-${{ hashFiles('pom.xml') }}
+        restore-keys: |
+          ${{ runner.os }}-maven-
+
     - name: Set up JDK
       uses: actions/setup-java@v4
       with:
@@ -40,3 +50,8 @@ jobs:
 
     - name: Static Code Analysis
       run: mvn checkstyle:checkstyle
+      
+    - if: steps.cache.outputs.cache-hit != 'true'
+      name: Install Maven dependencies
+      run: mvn dependency:go-offline
+
