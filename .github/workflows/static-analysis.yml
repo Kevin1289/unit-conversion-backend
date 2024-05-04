@@ -39,8 +39,4 @@ jobs:
         check-latest: true
 
     - name: Static Code Analysis
-      run: |
-        # Example: Run Checkstyle
-        mvn checkstyle:checkstyle
-        # Example: Run PMD
-        # mvn pmd:pmd
+      run: mvn checkstyle:checkstyle
