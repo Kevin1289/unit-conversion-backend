@@ -1,4 +1,4 @@
-package edu.conversion.unitconversion.controllers;
+package edu.conversion.unitconversion.controller;
 
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RestController;
@@ -14,7 +14,8 @@ public class UnitConversionController {
      */
     @GetMapping("/unitconversion")
     public String unitConversion() {
-        System.out.println("Hi");
+        // print The temperature from Celsius to Fahrenheit is: 33.8
+        System.out.println("The temperature from Celsius to Fahrenheit is: " + 0);
         return "Unit Conversion";
     }
 
