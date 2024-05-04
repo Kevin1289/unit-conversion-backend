@@ -48,6 +48,9 @@
 				<groupId>org.apache.maven.plugins</groupId>
             	<artifactId>maven-pmd-plugin</artifactId>
 				<version>3.22.0</version>
+				<configuration>
+					<printFailingErrors>true</printFailingErrors>
+				</configuration>
 				<executions>
 					<execution>
 						<phase>verify</phase>
@@ -56,6 +59,26 @@
 						</goals>
 					</execution>
 				</executions>
+        	</plugin>
+			<plugin>
+				<groupId>org.apache.maven.plugins</groupId>
+				<artifactId>maven-checkstyle-plugin</artifactId>
+				<version>3.3.1</version>
+				<executions>
+					<execution>
+						<id>checkstyle</id>
+						<phase>verify</phase>
+						<goals>
+							<goal>check</goal>
+						</goals>
+					</execution>
+				</executions>
+				<configuration>
+					<configLocation>checkstyle/CheckStyle.xml</configLocation> <!-- Path to your Checkstyle configuration file -->
+					<sourceDirectories>
+						<sourceDirectory>src/main/java</sourceDirectory>
+					</sourceDirectories>
+				</configuration>
         	</plugin>
 		</plugins>
 	</build>
