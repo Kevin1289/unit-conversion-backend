@@ -1,0 +1,42 @@
+# CI Workflow: Build and Package
+#
+# Description:
+#   This workflow builds and packages the application by compiling the source code, resolving dependencies,
+#   and generating artifacts. It ensures that the application is ready for testing and deployment.
+#
+# Triggers:
+#   - Pushes to the master branch
+#   - Pull requests targeting the master branch
+#
+# Steps:
+#   1. Checkout code: Fetches the codebase associated with the specified branch or pull request from the VCS repository.
+#   2. Set up JDK: Sets up the Java environment using the specified JDK version.
+#   3. Build with Maven: Builds the Maven project by executing Maven commands.
+#
+name: Build and Package
+
+on:
+  push:
+    branches:
+      - master
+  pull_request:
+    branches:
+      - master
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+
+    steps:
+    - name: Checkout code
+      uses: actions/checkout@v2
+
+    - name: Set up JDK
+      uses: actions/setup-java@v4
+      with:
+        distribution: 'temurin'
+        java-version: '21'
+        check-latest: true
+
+    - name: Build with Maven
+      run: mvn -B package --file pom.xml

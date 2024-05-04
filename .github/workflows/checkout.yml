@@ -1,0 +1,30 @@
+# CI Workflow: Source Code Management (SCM) Checkout
+#
+# Description:
+#   This workflow checks out the latest version of the source code from the version control system (VCS)
+#   repository and makes it available for subsequent steps in the CI pipeline.
+#
+# Triggers:
+#   - Pushes to the master branch
+#   - Pull requests targeting the master branch
+#
+# Steps:
+#   1. Checkout code: Fetches the codebase associated with the specified branch or pull request from the VCS repository.
+#
+name: Checkout Source Code
+
+on:
+  push:
+    branches:
+      - master
+  pull_request:
+    branches:
+      - master
+
+jobs:
+  checkout:
+    runs-on: ubuntu-latest
+
+    steps:
+    - name: Checkout code
+      uses: actions/checkout@v2
