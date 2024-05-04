@@ -16,4 +16,25 @@ public class UnitConversionRequest {
         this.target = target;
         this.response = response;
     }
+
+    public String getType() {
+        return type;
+    }
+
+    public double getValue() {
+        return value;
+    }
+
+    public String getUnit() {
+        return unit;
+    }
+
+    public String getTarget() {
+        return target;
+    }
+
+    public double getResponse() {
+        return response;
+    }
+
 }

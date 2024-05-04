@@ -9,10 +9,6 @@ public class UnitConversionResponse {
         this.status = status;
     }
 
-    public UnitConversionResponse() {
-        //TODO Auto-generated constructor stub
-    }
-
     public ResponseStatus getStatus() {
         return status;
     }
