@@ -2,6 +2,7 @@ package edu.conversion.unitconversion.controller;
 
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RestController;
+import com.digidemic.unitof.UnitOf;
 
 @RestController
 public class UnitConversionController {
