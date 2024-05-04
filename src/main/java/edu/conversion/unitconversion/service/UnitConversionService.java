@@ -8,8 +8,6 @@ import edu.conversion.unitconversion.dto.UnitConversionRequest;
 import edu.conversion.unitconversion.dto.UnitConversionResponse;
 import edu.conversion.unitconversion.enums.ResponseStatus;
 
-import com.digidemic.unitof.UnitOf;
-
 public class UnitConversionService {
 
     private static Map<String, List<String>> typeToUnits = new HashMap<>();
@@ -19,13 +17,6 @@ public class UnitConversionService {
         typeToUnits.put("volume", Arrays.asList("liters", "tablespoons", "cubic-inches", "cups", "cubic-feet", "gallons"));
         // Add more types and their units as needed
     }
-    
-    // public UnitConversionService() {
-    //     typeToUnits = new HashMap<>();
-    //     typeToUnits.put("temperature", Arrays.asList("kelvin", "celsius", "fahrenheit", "rankine"));
-    //     typeToUnits.put("volume", Arrays.asList("liters", "tablespoons", "cubic-inches", "cups", "cubic-feet", "gallons"));
-    //     // Add more types and their units as needed
-    // }
 
     public static UnitConversionResponse convert(UnitConversionRequest request) {
 
@@ -43,41 +34,40 @@ public class UnitConversionService {
 
         switch (request.getType()) {
             case "temperature":
-                UnitOf.Temperature temperature = new UnitOf.Temperature();
-                double authoritativeAnswer = 0.0;
+                double authoritativeAnswer = request.getValue();
                 double studentResponse = request.getResponse();
 
                 // Convert to target Temperature
-
+                // Convert to Celsius first
                 switch (request.getUnit()) {
                     case "celsius":
-                        temperature.fromCelsius(request.getValue());
+                        authoritativeAnswer = request.getValue();
                         break;
                     case "fahrenheit":
-                        temperature.fromFahrenheit(request.getValue());
+                        authoritativeAnswer = (request.getValue() - 32) * 5 / 9;
                         break;
                     case "kelvin":
-                        temperature.fromKelvin(request.getValue());
+                        authoritativeAnswer = request.getValue() - 273.15;
                         break;
                     case "rankine":
-                        temperature.fromRankine(request.getValue());
+                        authoritativeAnswer = (request.getValue() - 491.67) * 5 / 9;
                         break;
                     default:
                         return new UnitConversionResponse(ResponseStatus.INVALID);
                 }
 
+                // Convert to target Temperature
                 switch (request.getTarget()) {
                     case "celsius":
-                        authoritativeAnswer = temperature.toCelsius();
                         break;
                     case "fahrenheit":
-                        authoritativeAnswer = temperature.toFahrenheit();
+                        authoritativeAnswer = (authoritativeAnswer * 9 / 5) + 32;
                         break;
                     case "kelvin":
-                        authoritativeAnswer = temperature.toKelvin();
+                        authoritativeAnswer = authoritativeAnswer + 273.15;
                         break;
                     case "rankine":
-                        authoritativeAnswer = temperature.toRankine();
+                        authoritativeAnswer = (authoritativeAnswer * 9 / 5) + 491.67;
                         break;
                     default:
                         return new UnitConversionResponse(ResponseStatus.INVALID);
@@ -97,30 +87,29 @@ public class UnitConversionService {
                 return new UnitConversionResponse(ResponseStatus.INCORRECT);
                 
             case "volume":
-                UnitOf.Volume volume = new UnitOf.Volume();
-                double authoritativeAnswerVolume = 0.0;
+                double authoritativeAnswerVolume = request.getValue();
                 double studentResponseVolume = request.getResponse();
 
                 // Convert to target Volume
 
+                // Convert to Liters first
                 switch (request.getUnit()) {
                     case "liters":
-                        volume.fromLiters(request.getValue());
                         break;
                     case "tablespoons":
-                        volume.fromTablespoonsUS(request.getValue());
+                        authoritativeAnswerVolume = authoritativeAnswerVolume * 0.0147868;
                         break;
                     case "cubic-inches":
-                        volume.fromCubicInches(request.getValue());
+                        authoritativeAnswerVolume = authoritativeAnswerVolume * 0.0163871;
                         break;
                     case "cups":
-                        volume.fromCupsUS(request.getValue());
+                        authoritativeAnswerVolume = authoritativeAnswerVolume * 0.236588;
                         break;
                     case "cubic-feet":
-                        volume.fromCubicFeet(request.getValue());
+                        authoritativeAnswerVolume = authoritativeAnswerVolume * 28.3168;
                         break;
                     case "gallons":
-                        volume.fromGallonsUS(request.getValue());
+                        authoritativeAnswerVolume = authoritativeAnswerVolume * 3.78541;
                         break;
                     default:
                         return new UnitConversionResponse(ResponseStatus.INVALID);
@@ -128,22 +117,21 @@ public class UnitConversionService {
 
                 switch (request.getTarget()) {
                     case "liters":
-                        authoritativeAnswerVolume = volume.toLiters();
                         break;
                     case "tablespoons":
-                        authoritativeAnswerVolume = volume.toTablespoonsUS();
+                        authoritativeAnswerVolume = authoritativeAnswerVolume * 67.628;
                         break;
                     case "cubic-inches":
-                        authoritativeAnswerVolume = volume.toCubicInches();
+                        authoritativeAnswerVolume = authoritativeAnswerVolume * 61.0237;
                         break;
                     case "cups":
-                        authoritativeAnswerVolume = volume.toCupsUS();
+                        authoritativeAnswerVolume = authoritativeAnswerVolume * 4.22675;
                         break;
                     case "cubic-feet":
-                        authoritativeAnswerVolume = volume.toCubicFeet();
+                        authoritativeAnswerVolume = authoritativeAnswerVolume * 0.0353147;
                         break;
                     case "gallons":
-                        authoritativeAnswerVolume = volume.toGallonsUS();
+                        authoritativeAnswerVolume = authoritativeAnswerVolume * 0.264172;
                         break;
                     default:
                         return new UnitConversionResponse(ResponseStatus.INVALID);
