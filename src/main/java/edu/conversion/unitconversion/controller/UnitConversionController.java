@@ -9,6 +9,7 @@ import edu.conversion.unitconversion.dto.UnitConversionResponse;
 import edu.conversion.unitconversion.enums.ResponseStatus;
 import edu.conversion.unitconversion.service.UnitConversionService;
 
+import io.swagger.v3.oas.annotations.Operation;
 @RestController
 public class UnitConversionController {
 
@@ -22,6 +23,7 @@ public class UnitConversionController {
      * 
      * @return UnitConversionResponse
      */
+    @Operation(summary  = "Convert units", description  = "This is a simple endpoint for unit conversion.")
     @GetMapping("/unitconversion")
     public UnitConversionResponse unitConversion(@RequestParam(value = "type", required = true) String type,
             @RequestParam(value = "value", required = true) double value,
