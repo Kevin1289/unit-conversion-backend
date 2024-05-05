@@ -15,7 +15,6 @@ public class UnitConversionService {
     static {
         typeToUnits.put("temperature", Arrays.asList("kelvin", "celsius", "fahrenheit", "rankine"));
         typeToUnits.put("volume", Arrays.asList("liters", "tablespoons", "cubic-inches", "cups", "cubic-feet", "gallons"));
-        // Add more types and their units as needed
     }
 
     public static UnitConversionResponse convert(UnitConversionRequest request) {
@@ -91,7 +90,6 @@ public class UnitConversionService {
                 double studentResponseVolume = request.getResponse();
 
                 // Convert to target Volume
-
                 // Convert to Liters first
                 switch (request.getUnit()) {
                     case "liters":
@@ -115,6 +113,7 @@ public class UnitConversionService {
                         return new UnitConversionResponse(ResponseStatus.INVALID);
                 }
 
+                // Convert to target Volume
                 switch (request.getTarget()) {
                     case "liters":
                         break;
