@@ -18,7 +18,7 @@ name: Checkstyle Analysis
 on:
   push:
     branches:
-      - master
+      - "**"
   pull_request:
     branches:
       - master
@@ -28,30 +28,29 @@ jobs:
     runs-on: ubuntu-latest
 
     steps:
-    - name: Checkout code
-      uses: actions/checkout@v2
+      - name: Checkout code
+        uses: actions/checkout@v2
 
-    # Cache Maven dependencies
-    - name: Cache Maven dependencies
-      id: cache
-      uses: actions/cache@v2
-      with:
-        path: ~/.m2/repository
-        key: ${{ runner.os }}-maven-${{ hashFiles('pom.xml') }}
-        restore-keys: |
-          ${{ runner.os }}-maven-
+      # Cache Maven dependencies
+      - name: Cache Maven dependencies
+        id: cache
+        uses: actions/cache@v2
+        with:
+          path: ~/.m2/repository
+          key: ${{ runner.os }}-maven-${{ hashFiles('pom.xml') }}
+          restore-keys: |
+            ${{ runner.os }}-maven-
 
-    - name: Set up JDK
-      uses: actions/setup-java@v4
-      with:
-        distribution: 'temurin'
-        java-version: '21'
-        check-latest: true
+      - name: Set up JDK
+        uses: actions/setup-java@v4
+        with:
+          distribution: "temurin"
+          java-version: "21"
+          check-latest: true
 
-    - name: Static Code Analysis
-      run: mvn checkstyle:checkstyle
-      
-    - if: steps.cache.outputs.cache-hit != 'true'
-      name: Install Maven dependencies
-      run: mvn dependency:go-offline
+      - name: Static Code Analysis
+        run: mvn checkstyle:checkstyle
 
+      - if: steps.cache.outputs.cache-hit != 'true'
+        name: Install Maven dependencies
+        run: mvn dependency:go-offline
