@@ -1,7 +1,5 @@
 package edu.conversion.unitconversion.dto;
 
-// input {type: string, value: float, unit: string, target: string, response: float }
-
 public class UnitConversionRequest {
     private String type;
     private double value;

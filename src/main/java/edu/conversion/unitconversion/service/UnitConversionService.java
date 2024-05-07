@@ -14,7 +14,8 @@ public class UnitConversionService {
 
     static {
         typeToUnits.put("temperature", Arrays.asList("kelvin", "celsius", "fahrenheit", "rankine"));
-        typeToUnits.put("volume", Arrays.asList("liters", "tablespoons", "cubic-inches", "cups", "cubic-feet", "gallons"));
+        typeToUnits.put("volume",
+                Arrays.asList("liters", "tablespoons", "cubic-inches", "cups", "cubic-feet", "gallons"));
     }
 
     public static UnitConversionResponse convert(UnitConversionRequest request) {
@@ -28,8 +29,6 @@ public class UnitConversionService {
         if (!typeToUnits.get(request.getType()).contains(request.getUnit())) {
             return new UnitConversionResponse(ResponseStatus.INVALID);
         }
-
-        // Perform Conversion using the UnitOf library
 
         switch (request.getType()) {
             case "temperature":
@@ -71,7 +70,7 @@ public class UnitConversionService {
                     default:
                         return new UnitConversionResponse(ResponseStatus.INVALID);
                 }
-                
+
                 // round the authoritative answer to the tenths place
                 authoritativeAnswer = roundToTenths(authoritativeAnswer);
 
@@ -84,7 +83,7 @@ public class UnitConversionService {
                 }
 
                 return new UnitConversionResponse(ResponseStatus.INCORRECT);
-                
+
             case "volume":
                 double authoritativeAnswerVolume = request.getValue();
                 double studentResponseVolume = request.getResponse();
@@ -146,10 +145,10 @@ public class UnitConversionService {
                 if (studentResponseVolume == authoritativeAnswerVolume) {
                     return new UnitConversionResponse(ResponseStatus.CORRECT);
                 }
-                
+
                 return new UnitConversionResponse(ResponseStatus.INCORRECT);
-            
-                default:
+
+            default:
                 break;
         }
 

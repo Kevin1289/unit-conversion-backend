@@ -13,8 +13,6 @@
 #   2. Setup JDK: Sets up the Java environment using the specified JDK version.
 #   3. Run PMD Analysis: Executes PMD analysis on the Java codebase using Maven.
 #
-# Note: Adjust branch names and Java versions as needed.
-
 name: PMD Analysis
 
 on:
