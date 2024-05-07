@@ -1,3 +1,23 @@
+# CD Workflow: Deploy to AWS Elastic Beanstalk
+#
+# Description:
+#   This workflow automates the deployment of a Dockerized application to AWS Elastic Beanstalk. It builds the Docker image,
+#   generates a deployment package, and deploys the application to an Elastic Beanstalk environment.
+#
+# Triggers:
+#   - Pushes to the master branch
+#
+# Steps:
+#   1. Checkout Latest Repo: Fetches the latest codebase associated with the master branch from the version control system.
+#   2. Set up Docker Buildx: Sets up Docker Buildx for building multi-platform Docker images.
+#   3. Login to DockerHub: Logs in to DockerHub registry using the provided credentials.
+#   4. Build and push: Builds the Docker image specified in the Dockerfile and pushes it to DockerHub.
+#   5. Get Timestamp: Retrieves the current timestamp to use as a version label for the deployment.
+#   6. Run String Replace: Replaces characters in the timestamp to ensure a valid version label format.
+#   7. Generate Deployment Package: Creates a deployment package by compressing the application files.
+#   8. Deploy to EB: Deploys the application to AWS Elastic Beanstalk using the generated deployment package, AWS credentials,
+#      application name, environment name, and version label. It triggers the deployment process in the specified AWS region.
+#
 name: Prod deployment from Github to AWS Elastic Beanstalk
 on:
   push:

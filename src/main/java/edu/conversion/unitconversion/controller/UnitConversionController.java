@@ -41,11 +41,4 @@ public class UnitConversionController {
             return new UnitConversionResponse(ResponseStatus.INVALID);
         }
     }
-
-    // Test endpoint
-    @Operation(summary = "Test endpoint", description = "This is a test endpoint.")
-    @GetMapping("/test")
-    public String test() {
-        return "Test endpoint";
-    }
 }
