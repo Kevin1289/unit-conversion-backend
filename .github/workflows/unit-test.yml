@@ -51,6 +51,9 @@ jobs:
       - name: Run Unit Tests
         run: mvn test --file pom.xml
 
+      - name: Validate Test Coverage
+        run: mvn jacoco:check@check
+
       - if: steps.cache.outputs.cache-hit != 'true'
         name: Install Maven dependencies
         run: mvn dependency:go-offline

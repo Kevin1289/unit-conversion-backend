@@ -1,9 +1,5 @@
 package edu.conversion.unitconversion.service;
 
-import java.util.Arrays;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
 import edu.conversion.unitconversion.dto.UnitConversionRequest;
 import edu.conversion.unitconversion.dto.UnitConversionResponse;
 import edu.conversion.unitconversion.enums.ResponseStatus;

@@ -1,8 +1,6 @@
-# CI Workflow: PMD Analysis
+# CI Workflow: Security Check
 #
-# Description:
-#   This workflow performs static code analysis using PMD to identify potential issues and code smells
-#   in the Java codebase. It ensures that code quality checks are performed as part of the CI process.
+# Description: This workflow performs security vulnerability checks using Snyk to identify potential security vulnerabilities in the Java codebase
 #
 # Triggers:
 #   - Pushes to the master branch
@@ -11,9 +9,10 @@
 # Steps:
 #   1. Checkout code: Fetches the codebase associated with the specified branch or pull request from the VCS repository.
 #   2. Setup JDK: Sets up the Java environment using the specified JDK version.
-#   3. Run PMD Analysis: Executes PMD analysis on the Java codebase using Maven.
+#   3. Run Snyk Check: Executes Snyk check on the Java codebase using Maven.
 #
-name: PMD Analysis
+
+name: Snyk Check
 
 on:
   push:
@@ -24,8 +23,8 @@ on:
       - master
 
 jobs:
-  pmd:
-    name: Run PMD Analysis
+  snyk:
+    name: Run Snyk Check
     runs-on: ubuntu-latest
 
     steps:
@@ -49,8 +48,18 @@ jobs:
           distribution: "temurin"
           cache: maven
 
-      - name: Run PMD Analysis
-        run: mvn verify
+      - name: Run Snyk to check for vulnerabilities
+        uses: snyk/actions/maven-3-jdk-20@master
+        env:
+          SNYK_TOKEN: ${{ secrets.SNYK_TOKEN }}
+        with:
+          args: --sarif-file-output=snyk.sarif --severity-threshold=high
+
+      - name: Run Snyk Check
+        run: mvn snyk:check
+
+      - name: Run Dependency-Check
+        run: mvn dependency-check:check
 
       - if: steps.cache.outputs.cache-hit != 'true'
         name: Install Maven dependencies
