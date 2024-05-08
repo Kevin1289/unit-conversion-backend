@@ -10,25 +10,7 @@ import edu.conversion.unitconversion.enums.ResponseStatus;
 
 public class UnitConversionService {
 
-    private static Map<String, List<String>> typeToUnits = new HashMap<>();
-
-    static {
-        typeToUnits.put("temperature", Arrays.asList("kelvin", "celsius", "fahrenheit", "rankine"));
-        typeToUnits.put("volume",
-                Arrays.asList("liters", "tablespoons", "cubic-inches", "cups", "cubic-feet", "gallons"));
-    }
-
     public static UnitConversionResponse convert(UnitConversionRequest request) {
-
-        // verify if type is a key of typeToUnits
-        if (!typeToUnits.containsKey(request.getType())) {
-            return new UnitConversionResponse(ResponseStatus.INVALID);
-        }
-
-        // verify if unit is a value of the key type
-        if (!typeToUnits.get(request.getType()).contains(request.getUnit())) {
-            return new UnitConversionResponse(ResponseStatus.INVALID);
-        }
 
         switch (request.getType()) {
             case "temperature":
@@ -149,10 +131,8 @@ public class UnitConversionService {
                 return new UnitConversionResponse(ResponseStatus.INCORRECT);
 
             default:
-                break;
+                return new UnitConversionResponse(ResponseStatus.INVALID);
         }
-
-        return new UnitConversionResponse(ResponseStatus.INVALID);
     }
 
     public static double roundToTenths(double value) {

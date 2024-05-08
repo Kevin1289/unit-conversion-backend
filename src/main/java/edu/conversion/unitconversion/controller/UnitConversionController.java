@@ -6,7 +6,6 @@ import org.springframework.web.bind.annotation.RestController;
 
 import edu.conversion.unitconversion.dto.UnitConversionRequest;
 import edu.conversion.unitconversion.dto.UnitConversionResponse;
-import edu.conversion.unitconversion.enums.ResponseStatus;
 import edu.conversion.unitconversion.service.UnitConversionService;
 
 import io.swagger.v3.oas.annotations.Operation;
@@ -33,12 +32,7 @@ public class UnitConversionController {
             @RequestParam(value = "target", required = true) String target,
             @RequestParam(value = "response", required = true) double response) {
 
-        try {
-            UnitConversionRequest request = new UnitConversionRequest(type, value, unit, target, response);
-
-            return UnitConversionService.convert(request);
-        } catch (Exception e) {
-            return new UnitConversionResponse(ResponseStatus.INVALID);
-        }
+        UnitConversionRequest request = new UnitConversionRequest(type, value, unit, target, response);
+        return UnitConversionService.convert(request);
     }
 }

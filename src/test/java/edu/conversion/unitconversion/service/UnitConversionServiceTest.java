@@ -1,89 +1,185 @@
 package edu.conversion.unitconversion.service;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertNotNull;
 
 import org.junit.jupiter.api.Test;
 import edu.conversion.unitconversion.dto.UnitConversionRequest;
 import edu.conversion.unitconversion.dto.UnitConversionResponse;
 import edu.conversion.unitconversion.enums.ResponseStatus;
- 
+
 public class UnitConversionServiceTest {
 
-    // Test case for when type is valid meaning is "volume" or "temperature"
     @Test
-    public void testValidType() {
-        UnitConversionRequest request = new UnitConversionRequest("temperature", 84.2 , "fahrenheit", "rankine", 543.94);
+    public void testConstructor() {
+        UnitConversionService service = new UnitConversionService();
+        assertNotNull(service);
+    }
+
+    @Test
+    public void testValidTemperatureConversion() {
+        UnitConversionRequest request = new UnitConversionRequest("temperature", 32.0, "fahrenheit", "celsius", 0.0);
         UnitConversionResponse response = UnitConversionService.convert(request);
         assertEquals(ResponseStatus.CORRECT, response.getStatus());
     }
-    
-    // Test case for when type is invalid meaning not "volume" or"temperature"
+
     @Test
-    public void testInvalidType() {
-        UnitConversionRequest request = new UnitConversionRequest("invalid", 84.2 , "fahrenheit", "rankine", 543.94);
+    public void testInvalidUnitTemperatureConversion() {
+        UnitConversionRequest request = new UnitConversionRequest("temperature", 32.0, "invalidUnit", "celsius", 0.0);
         UnitConversionResponse response = UnitConversionService.convert(request);
         assertEquals(ResponseStatus.INVALID, response.getStatus());
     }
 
-    // Test case for when type is "temperature" and unit is invalid or not in the list
     @Test
-    public void testInvalidTemperatureUnit() {
-        UnitConversionRequest request = new UnitConversionRequest("temperature", 136.1, "dog", "celsius", 45.32);
+    public void testInvalidTargetTemperatureConversion() {
+        UnitConversionRequest request = new UnitConversionRequest("temperature", 32.0, "fahrenheit", "invalidUnit",
+                0.0);
         UnitConversionResponse response = UnitConversionService.convert(request);
         assertEquals(ResponseStatus.INVALID, response.getStatus());
     }
 
-    // Test case for when type is "volume" and unit is invalid or not in the list
     @Test
-    public void testInvalidVolumeUnit() {
-        UnitConversionRequest request = new UnitConversionRequest("volume", 1.0, "celsius", "gallons", 0.264172);
+    public void testValidVolumeConversion() {
+        UnitConversionRequest request = new UnitConversionRequest("volume", 1.0, "liters", "gallons", 0.264172);
+        UnitConversionResponse response = UnitConversionService.convert(request);
+        assertEquals(ResponseStatus.CORRECT, response.getStatus());
+    }
+
+    @Test
+    public void testInvalidTargetVolumeConversion() {
+        UnitConversionRequest request = new UnitConversionRequest("volume", 1.0, "liters", "invalidUnit", 0.264172);
         UnitConversionResponse response = UnitConversionService.convert(request);
         assertEquals(ResponseStatus.INVALID, response.getStatus());
     }
 
-    // Test case for when the answer is correct
     @Test
-    public void testCorrectAnswer() {
-        UnitConversionRequest request = new UnitConversionRequest("temperature", 1.0, "celsius", "fahrenheit", 33.8);
+    public void testInvalidUnitVolumeConversion() {
+        UnitConversionRequest request = new UnitConversionRequest("volume", 1.0, "invalidUnit", "gallons", 0.264172);
+        UnitConversionResponse response = UnitConversionService.convert(request);
+        assertEquals(ResponseStatus.INVALID, response.getStatus());
+    }
+
+    @Test
+    public void testIncorrectTemperatureConversion() {
+        UnitConversionRequest request = new UnitConversionRequest("temperature", 32.0, "fahrenheit", "celsius", 100.0);
+        UnitConversionResponse response = UnitConversionService.convert(request);
+        assertEquals(ResponseStatus.INCORRECT, response.getStatus());
+    }
+
+    @Test
+    public void testIncorrectVolumeConversion() {
+        UnitConversionRequest request = new UnitConversionRequest("volume", 1.0, "liters", "gallons", 1.0);
+        UnitConversionResponse response = UnitConversionService.convert(request);
+        assertEquals(ResponseStatus.INCORRECT, response.getStatus());
+    }
+
+    @Test
+    public void testRoundingToTenths() {
+        double roundedValue = UnitConversionService.roundToTenths(3.56789);
+        assertEquals(3.6, roundedValue);
+    }
+
+    // Test for all branches in the convert method
+    @Test
+    public void testInvalidTypeConversion() {
+        UnitConversionRequest request = new UnitConversionRequest("invalidType", 1.0, "liters", "gallons", 1.0);
+        UnitConversionResponse response = UnitConversionService.convert(request);
+        assertEquals(ResponseStatus.INVALID, response.getStatus());
+    }
+
+    @Test
+    public void testInvalidUnitConversion() {
+        UnitConversionRequest request = new UnitConversionRequest("temperature", 1.0, "invalidUnit", "gallons", 1.0);
+        UnitConversionResponse response = UnitConversionService.convert(request);
+        assertEquals(ResponseStatus.INVALID, response.getStatus());
+    }
+
+    @Test
+    public void testCorrectTemperatureConversion() {
+        UnitConversionRequest request = new UnitConversionRequest("temperature", 32.0, "fahrenheit", "celsius", 0.0);
         UnitConversionResponse response = UnitConversionService.convert(request);
         assertEquals(ResponseStatus.CORRECT, response.getStatus());
     }
 
-    // Test case for when the answer is correct after rounding student's response to the tenths place
     @Test
-    public void testCorrectAnswerRoundedStudent() {
-        UnitConversionRequest request = new UnitConversionRequest("temperature", 5, "celsius", "fahrenheit", 41.02);
+    public void testCorrectVolumeConversion() {
+        UnitConversionRequest request = new UnitConversionRequest("volume", 1.0, "liters", "gallons", 0.264172);
         UnitConversionResponse response = UnitConversionService.convert(request);
         assertEquals(ResponseStatus.CORRECT, response.getStatus());
     }
 
-    // Test case for when the answer is correct after rounding authoritative answer to the tenths place
+    // Test for conversion for each temperature unit
+
     @Test
-    public void testCorrectAnswerRoundedAuth() {
-        UnitConversionRequest request = new UnitConversionRequest("temperature", 317.33, "celsius", "fahrenheit", 603.2);
+    public void testCelsiusToFahrenheit() {
+        UnitConversionRequest request = new UnitConversionRequest("temperature", 0.0, "celsius", "fahrenheit", 32.0);
         UnitConversionResponse response = UnitConversionService.convert(request);
         assertEquals(ResponseStatus.CORRECT, response.getStatus());
     }
 
-    // Test case for when the answer is correct after rounding both student's response and authoritative answer to the tenths place
     @Test
-    public void testCorrectAnswerRoundedBoth() {
-        UnitConversionRequest request = new UnitConversionRequest("temperature", 317.33, "celsius", "fahrenheit", 603.211);
+    public void testFarhenheitToKelvin() {
+        UnitConversionRequest request = new UnitConversionRequest("temperature", 32.0, "fahrenheit", "kelvin", 273.15);
         UnitConversionResponse response = UnitConversionService.convert(request);
         assertEquals(ResponseStatus.CORRECT, response.getStatus());
     }
 
-    // Test case for rounding is needed
     @Test
-    public void testRoundToTenths() {
-        double rounded = UnitConversionService.roundToTenths(123.456);
-        assertEquals(123.5, rounded);
+    public void testKelvinToRankine() {
+        UnitConversionRequest request = new UnitConversionRequest("temperature", 273.15, "kelvin", "rankine", 491.67);
+        UnitConversionResponse response = UnitConversionService.convert(request);
+        assertEquals(ResponseStatus.CORRECT, response.getStatus());
     }
 
-    // Test case for rounding is not needed
     @Test
-    public void testNoRoundToTenths() {
-        double rounded = UnitConversionService.roundToTenths(123.4);
-        assertEquals(123.4, rounded);
+    public void testRankineToCelsius() {
+        UnitConversionRequest request = new UnitConversionRequest("temperature", 491.67, "rankine", "celsius", 0.0);
+        UnitConversionResponse response = UnitConversionService.convert(request);
+        assertEquals(ResponseStatus.CORRECT, response.getStatus());
+    }
+
+    // Test for conversion for each volume unit
+
+    @Test
+    public void testLitersToTablespoons() {
+        UnitConversionRequest request = new UnitConversionRequest("volume", 1.0, "liters", "tablespoons", 67.628);
+        UnitConversionResponse response = UnitConversionService.convert(request);
+        assertEquals(ResponseStatus.CORRECT, response.getStatus());
+    }
+
+    @Test
+    public void testTablespoonsToCubicInches() {
+        UnitConversionRequest request = new UnitConversionRequest("volume", 1.0, "tablespoons", "cubic-inches",
+                0.902344);
+        UnitConversionResponse response = UnitConversionService.convert(request);
+        assertEquals(ResponseStatus.CORRECT, response.getStatus());
+    }
+
+    @Test
+    public void testCubicInchesToCups() {
+        UnitConversionRequest request = new UnitConversionRequest("volume", 1.0, "cubic-inches", "cups", 0.0692641);
+        UnitConversionResponse response = UnitConversionService.convert(request);
+        assertEquals(ResponseStatus.CORRECT, response.getStatus());
+    }
+
+    @Test
+    public void testCupsToCubicFeet() {
+        UnitConversionRequest request = new UnitConversionRequest("volume", 1.0, "cups", "cubic-feet", 0.00835503);
+        UnitConversionResponse response = UnitConversionService.convert(request);
+        assertEquals(ResponseStatus.CORRECT, response.getStatus());
+    }
+
+    @Test
+    public void testCubicFeetToGallons() {
+        UnitConversionRequest request = new UnitConversionRequest("volume", 1.0, "cubic-feet", "gallons", 7.48052);
+        UnitConversionResponse response = UnitConversionService.convert(request);
+        assertEquals(ResponseStatus.CORRECT, response.getStatus());
+    }
+
+    @Test
+    public void testGallonsToLiters() {
+        UnitConversionRequest request = new UnitConversionRequest("volume", 1.0, "gallons", "liters", 3.78541);
+        UnitConversionResponse response = UnitConversionService.convert(request);
+        assertEquals(ResponseStatus.CORRECT, response.getStatus());
     }
 }
