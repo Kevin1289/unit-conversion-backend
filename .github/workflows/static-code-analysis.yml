@@ -1,8 +1,6 @@
-# CI Workflow: Publish Artifacts
+# CI Workflow: Static Code Analysis
 #
-# Description:
-#   This workflow publishes the build artifacts to a repository or artifact store for further consumption
-#   in the CI/CD pipeline or deployment process. It ensures that the artifacts are available for testing and deployment.
+# Description: This workflow performs static code analysis using PMD and Checkstyle to identify potential issues in the Java codebase.
 #
 # Triggers:
 #   - Pushes to the master branch
@@ -10,11 +8,11 @@
 #
 # Steps:
 #   1. Checkout code: Fetches the codebase associated with the specified branch or pull request from the VCS repository.
-#   2. Set up JDK: Sets up the Java environment using the specified JDK version.
-#   3. Build with Maven: Builds the Maven project by executing Maven commands.
-#   4. Publish Artifact: Uploads the build artifacts (e.g., JAR files) to a repository or artifact store.
+#   2. Setup JDK: Sets up the Java environment using the specified JDK version.
+#   3. Run PMD Check: Executes PMD check on the Java codebase using Maven.
+#   4. Static Code Analysis: Executes Checkstyle check on the Java codebase using Maven.
 #
-name: Publish Artifacts
+name: Static Code Analysis
 
 on:
   push:
@@ -25,7 +23,8 @@ on:
       - master
 
 jobs:
-  publish:
+  static-code-analysis:
+    name: Run Static Code Analysis
     runs-on: ubuntu-latest
 
     steps:
@@ -42,22 +41,19 @@ jobs:
           restore-keys: |
             ${{ runner.os }}-maven-
 
-      - name: Set up JDK
+      - name: Set up JDK 21
         uses: actions/setup-java@v4
         with:
-          distribution: "temurin"
           java-version: "21"
-          check-latest: true
+          distribution: "temurin"
+          cache: maven
 
-      - name: Build with Maven
-        run: mvn -B package --file pom.xml
+      - name: Run PMD Check
+        run: mvn pmd:check
+
+      - name: Static Code Analysis
+        run: mvn checkstyle:checkstyle
 
       - if: steps.cache.outputs.cache-hit != 'true'
         name: Install Maven dependencies
         run: mvn dependency:go-offline
-
-      - name: Publish Artifact
-        uses: actions/upload-artifact@v2
-        with:
-          name: my-artifact
-          path: target/my-artifact.jar

@@ -12,6 +12,7 @@
 #   1. Checkout code: Fetches the codebase associated with the specified branch or pull request from the VCS repository.
 #   2. Set up JDK: Sets up the Java environment using the specified JDK version.
 #   3. Build with Maven: Builds the Maven project by executing Maven commands.
+#   4. Publish Artifact: Uploads the build artifacts (e.g., JAR files) to a repository or artifact store.
 #
 name: Build and Package
 
@@ -54,3 +55,9 @@ jobs:
       - if: steps.cache.outputs.cache-hit != 'true'
         name: Install Maven dependencies
         run: mvn dependency:go-offline
+
+      - name: Publish Artifact
+        uses: actions/upload-artifact@v2
+        with:
+          name: my-artifact
+          path: target/my-artifact.jar
