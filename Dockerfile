@@ -13,7 +13,7 @@ COPY src ./src
 RUN mvn package -DskipTests
 
 # Use a lightweight alpine image as the base image for the final stage
-FROM maven:3.9.6-eclipse-temurin-21-alpine
+FROM maven:3.9.7-eclipse-temurin-21-alpine
 # Set the working directory in the container
 WORKDIR /app
 # Copy the built JAR file from the previous stage to the container
